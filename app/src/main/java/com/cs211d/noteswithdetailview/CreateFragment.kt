@@ -71,7 +71,7 @@ class CreateFragment : Fragment() {
 
         includePhotoSwitch.setOnCheckedChangeListener { _, isChecked ->
             // ***** YOUR STEP 2 PART A CODE HERE *****
-
+            takePhotoButton.visibility = if (isChecked) View.VISIBLE else View.INVISIBLE
         }
 
         return rootView

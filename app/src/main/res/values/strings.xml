@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">NotesWithDetailView</string>
+    <string name="list_name">List Notes</string>
+    <string name="details_name">Note Details</string>
+    <string name="delete">Delete</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="notes_file_name">HW10notes.txt</string>
+    <string name="clear_list_dialog_text">Are you sure you want to clear the list?</string>
+    <string name="yes_text">Yes</string>
+    <string name="no_text">No</string>
+    <string name="no_photo_text_indicator">NO-PHOTO</string>
+    <string name="end_details_text_indicator">---E-N-D---</string>
+    <string name="note_title_key">noteTitle</string>
+    <string name="note_details_key">noteDetails</string>
+    <string name="photo_uri_key">photoUri</string>
+    <string name="note_id_key">noteID</string>
+
+
+</resources>

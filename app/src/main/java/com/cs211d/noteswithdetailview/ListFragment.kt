@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
@@ -49,8 +50,8 @@ class ListFragment : Fragment(), MenuProvider {
             val details = requireArguments().getString(getString(R.string.note_details_key))
 
             // this method is deprecated, but used because newer ones aren't compatible with older versions of android
-            val photoUri: Uri? = null;  // ***** YOUR STEP 3 PART A CODE HERE *****
-
+              // ***** YOUR STEP 3 PART A CODE HERE *****
+            val photoUri = requireArguments().getParcelable<Uri>(getString(R.string.photo_uri_key))
 
             if(title!=null && details!=null) {
                 var note = addNoteToList(title!!, details!!, photoUri)
@@ -99,8 +100,12 @@ class ListFragment : Fragment(), MenuProvider {
 
         // ***** YOUR STEP 3 PART B CODE HERE *****
         // line 2- photo info
-
-
+        if(note.photoUri==null) {
+            writer.println(getString(R.string.no_photo_text_indicator))
+        }
+        else{
+            writer.println(note.photoUri)
+        }
         // line 3 or more- details
         writer.println(note.details)
         writer.println(getString(R.string.end_details_text_indicator))
@@ -133,7 +138,11 @@ class ListFragment : Fragment(), MenuProvider {
                 val photoTextStore = reader.readLine() // read in "line2"
                 // then your code goes here, after the line is read!
 
-
+                if (photoUriString== R.string.no_photo_text_indicator.toString())
+                    else{
+                    photoUriString = photoTextStore
+                    photoUri=Uri.parse(photoUriString)
+                }
 
                 //the remaining lines 3 or more are the details, with a text indicator marking the end
                 inputString = reader.readLine()

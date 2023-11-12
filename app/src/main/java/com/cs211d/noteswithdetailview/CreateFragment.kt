@@ -62,10 +62,11 @@ class CreateFragment : Fragment() {
                 val bundle = Bundle().apply {
                     putString(getString(R.string.note_title_key), title)
                     putString(getString(R.string.note_details_key), details)
-
+                    Log.d("TEST", "in OnCreate bundle, ${hasPhoto}")
                     // ***** YOUR STEP 2 PART C CODE HERE *****
                     if(hasPhoto) {
                         putParcelable(getString(R.string.photo_uri_key), photoUri)
+                        Log.d("TEST", "in OnCreate bundle, ${photoUri}")
                     }
 
                 }
@@ -93,7 +94,7 @@ class CreateFragment : Fragment() {
         // Use requireContext() to get the context
         val contextInFragment: Context = requireContext()
         // create a content URI so the camera can access this app-specific file
-        val photoUri = FileProvider.getUriForFile(
+        photoUri = FileProvider.getUriForFile(
             contextInFragment,
             "com.cs211d.noteswithdetailview.fileprovider", photoFile!!
         )
@@ -106,7 +107,7 @@ class CreateFragment : Fragment() {
                 Log.d("ActivityResultLauncher", "TRUE")
                 displayImage()
                 savePhoto()
-
+                hasPhoto = true
             }
         }
     private fun createImageFile(): File {
@@ -121,12 +122,14 @@ class CreateFragment : Fragment() {
     }
 
     private fun displayImage() {
+        val targetWidth = photoImageView.width
+        val targetHeight = photoImageView.height
 
-        //BitmapFactory.decodeFile(photoFile!!.absolutePath)
         Log.d("TEST", "in displayImage, ${photoFile}")
         val notePicture = BitmapFactory.decodeFile(photoFile!!.absolutePath)
-        Log.d("TEST", "in displayImage, notePicture = , ${notePicture}")
+        Log.d("TEST", "in displayImage, notePicture =  ${notePicture}")
         photoImageView.setImageBitmap(notePicture)
+        photoImageView.visibility = View.VISIBLE
      }
 
     private fun savePhoto() {

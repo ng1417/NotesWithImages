@@ -61,7 +61,9 @@ class CreateFragment : Fragment() {
                     putString(getString(R.string.note_details_key), details)
 
                     // ***** YOUR STEP 2 PART C CODE HERE *****
-
+                    if(photoFile != null) {
+                        putParcelable(getString(R.string.photo_uri_key), photoUri)
+                    }
                 }
                 Navigation.findNavController(rootView)
                       .navigate(R.id.action_createFragment_to_list_fragment, bundle)
@@ -71,7 +73,7 @@ class CreateFragment : Fragment() {
 
         includePhotoSwitch.setOnCheckedChangeListener { _, isChecked ->
             // ***** YOUR STEP 2 PART A CODE HERE *****
-
+            takePhotoButton.visibility = if (isChecked) View.VISIBLE else View.INVISIBLE
         }
 
         return rootView
@@ -82,8 +84,71 @@ class CreateFragment : Fragment() {
         // ***** YOUR STEP 2 PART B CODE HERE *****
         // You might have new variables you declare that are used in this method.
         // You should write other functions that are invoked from this method.
+        photoFile = createImageFile()
 
-
+        // create a content URI so the camera can access this app-specific file
+        photoUri = FileProvider.getUriForFile(
+            rootView.context,
+            "com.cs211d.noteswithdetailview.fileprovider", photoFile!!
+        )
+        takePictureResultLauncher.launch(photoUri)
     }
 
+    private val takePictureResultLauncher: ActivityResultLauncher<Uri> =
+        registerForActivityResult( /* contract = */ ActivityResultContracts.TakePicture()) { success ->
+            if (success) {
+                displayImage()
+                savePhoto()
+            }
+        }
+
+    private fun createImageFile(): File {
+        // create a unique image filename
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+        val imageFilename = "{$timeStamp}_photo.jpg"
+
+        // get file path where the app can save a private image
+        val storageDir = rootView.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+        return File(storageDir, imageFilename)
+
+    }
+    private fun displayImage() {
+        if (photoImageView.visibility != View.VISIBLE) {
+            photoImageView.visibility = View.VISIBLE
+        }
+
+        val fullImage = BitmapFactory.decodeFile(photoFile!!.absolutePath)
+
+        // display fullImage
+        photoImageView.setImageBitmap(fullImage)
+    }
+
+    private fun savePhoto() {
+        if (photoFile != null) {
+
+            // save image in background thread
+            CoroutineScope(Dispatchers.Main).launch {
+
+                val imageValues = ContentValues()
+                imageValues.put(MediaStore.MediaColumns.DISPLAY_NAME, photoFile!!.name)
+                imageValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    imageValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
+                }
+                val resolver =  rootView.context.applicationContext.contentResolver
+                val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imageValues)
+
+                // save bitmap as JPEG
+                uri?.let {
+                    runCatching {
+                        resolver.openOutputStream(it).use { outStream ->
+                            val photoBitmap = BitmapFactory.decodeFile(photoFile!!.absolutePath, null)
+                            photoBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream!!)
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

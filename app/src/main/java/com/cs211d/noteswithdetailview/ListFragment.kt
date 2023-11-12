@@ -42,15 +42,13 @@ class ListFragment : Fragment(), MenuProvider {
         recyclerView = rootView.findViewById<RecyclerView>(R.id.note_title_list_recyclerview)
         recyclerView.adapter = NoteAdapter(noteList)
 
-
         /* when a new note has been created, add it to the list and write it to the file */
         if(arguments!=null) {
             val title = requireArguments().getString(getString(R.string.note_title_key))
             val details = requireArguments().getString(getString(R.string.note_details_key))
 
             // this method is deprecated, but used because newer ones aren't compatible with older versions of android
-            val photoUri: Uri? = null;  // ***** YOUR STEP 3 PART A CODE HERE *****
-
+            val photoUri: Uri? = requireArguments().getParcelable(getString(R.string.photo_uri_key));  // ***** YOUR STEP 3 PART A CODE HERE *****
 
             if(title!=null && details!=null) {
                 var note = addNoteToList(title!!, details!!, photoUri)
@@ -99,7 +97,11 @@ class ListFragment : Fragment(), MenuProvider {
 
         // ***** YOUR STEP 3 PART B CODE HERE *****
         // line 2- photo info
-
+        if(note.photoUri != null){
+            writer.println(note.photoUri)
+        } else {
+            writer.println(getString(R.string.no_photo_text_indicator))
+        }
 
         // line 3 or more- details
         writer.println(note.details)
@@ -132,7 +134,10 @@ class ListFragment : Fragment(), MenuProvider {
                 var photoUri : Uri? = null // this should store the Uri if there is one
                 val photoTextStore = reader.readLine() // read in "line2"
                 // then your code goes here, after the line is read!
-
+                if(photoTextStore != null){
+                    hasPhoto = true
+                    photoUri = Uri.parse(photoTextStore)
+                }
 
 
                 //the remaining lines 3 or more are the details, with a text indicator marking the end
@@ -220,7 +225,12 @@ class ListFragment : Fragment(), MenuProvider {
 
         fun bind(note: Note) {
             this.note = note
-            noteTitleTextView.text = note.title
+
+            if(note.hasPhoto){
+                noteTitleTextView.text = note.title + "\uD83D\uDCF7"
+            } else {
+                noteTitleTextView.text = note.title
+            }
 
             if (selectedNotePosition == this.bindingAdapterPosition) {
                 noteTitleTextView.setBackgroundColor(Color.RED)

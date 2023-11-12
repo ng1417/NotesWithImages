@@ -138,8 +138,9 @@ class ListFragment : Fragment(), MenuProvider {
                 val photoTextStore = reader.readLine() // read in "line2"
                 // then your code goes here, after the line is read!
                 if (photoTextStore != getString(R.string.no_photo_text_indicator)) {
-                    photoUri = Uri.parse(photoUriString)
                     hasPhoto = true
+                    photoUri = Uri.parse(photoUriString)
+
                 }
 
 

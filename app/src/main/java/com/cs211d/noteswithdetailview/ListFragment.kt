@@ -231,6 +231,11 @@ class ListFragment : Fragment(), MenuProvider {
             this.note = note
             noteTitleTextView.text = note.title
 
+            // add the camera emoji if hasPhoto
+            if (note.hasPhoto) {
+                noteTitleTextView.text = note.title + "\uD83D\uDCF7"
+            }
+
             if (selectedNotePosition == this.bindingAdapterPosition) {
                 noteTitleTextView.setBackgroundColor(Color.RED)
             }

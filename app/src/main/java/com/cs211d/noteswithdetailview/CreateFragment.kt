@@ -141,7 +141,7 @@ class CreateFragment : Fragment() {
 
         val fullImage = BitmapFactory.decodeFile(photoFile!!.absolutePath)
 
-        // dsplay smaller bitmap
+        // dsplay full bitmap
         photoImageView.setImageBitmap(fullImage)
         photoImageView.visibility = View.VISIBLE
 

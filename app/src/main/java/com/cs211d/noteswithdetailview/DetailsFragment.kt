@@ -31,7 +31,7 @@ class DetailsFragment : Fragment() {
             detailsTextView.text = note!!.details
 
             // ***** YOUR STEP 4 CODE HERE *****
-            if (note.hasPhoto) {
+            if (note!!.hasPhoto) {
                 displayPhoto(note.photoUri!!)
             }
 

@@ -139,7 +139,7 @@ class ListFragment : Fragment(), MenuProvider {
                 // then your code goes here, after the line is read!
                 if (photoTextStore != getString(R.string.no_photo_text_indicator)) {
                     hasPhoto = true
-                    photoUri = Uri.parse(photoUriString)
+                    photoUri = Uri.parse(photoTextStore)
 
                 }
 

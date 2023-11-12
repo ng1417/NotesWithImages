@@ -49,8 +49,8 @@ class ListFragment : Fragment(), MenuProvider {
             val details = requireArguments().getString(getString(R.string.note_details_key))
 
             // this method is deprecated, but used because newer ones aren't compatible with older versions of android
-            val photoUri: Uri? = null;  // ***** YOUR STEP 3 PART A CODE HERE *****
-
+            // ***** YOUR STEP 3 PART A CODE HERE *****
+            val photoUri: Uri? = requireArguments().getParcelable(getString(R.string.photo_uri_key))
 
             if(title!=null && details!=null) {
                 var note = addNoteToList(title!!, details!!, photoUri)
@@ -99,6 +99,11 @@ class ListFragment : Fragment(), MenuProvider {
 
         // ***** YOUR STEP 3 PART B CODE HERE *****
         // line 2- photo info
+        if(note.photoUri==null) {
+            writer.println(getString(R.string.no_photo_text_indicator))
+        } else {
+            writer.println(note.photoUri)
+        }
 
 
         // line 3 or more- details
@@ -132,7 +137,9 @@ class ListFragment : Fragment(), MenuProvider {
                 var photoUri : Uri? = null // this should store the Uri if there is one
                 val photoTextStore = reader.readLine() // read in "line2"
                 // then your code goes here, after the line is read!
-
+                if (photoTextStore != getString(R.string.no_photo_text_indicator)) {
+                    photoUri = Uri.parse(photoUriString)
+                }
 
 
                 //the remaining lines 3 or more are the details, with a text indicator marking the end

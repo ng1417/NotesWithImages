@@ -134,7 +134,7 @@ class ListFragment : Fragment(), MenuProvider {
                 var photoUri : Uri? = null // this should store the Uri if there is one
                 val photoTextStore = reader.readLine() // read in "line2"
                 // then your code goes here, after the line is read!
-                if(photoTextStore != null){
+                if(photoTextStore != getString(R.string.no_photo_text_indicator)){
                     hasPhoto = true
                     photoUri = Uri.parse(photoTextStore)
                 }

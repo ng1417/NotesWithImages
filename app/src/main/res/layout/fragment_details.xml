@@ -11,6 +11,7 @@
         android:id="@+id/note_title_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
         android:layout_marginBottom="8dp"
         android:text="TextView"
         android:textSize="60sp" />
@@ -19,6 +20,7 @@
         android:id="@+id/note_details_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
         android:text="TextView"
         android:textSize="24sp" />
 
